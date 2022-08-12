@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
-
 import { Form, Field, Formik, ErrorMessage } from 'formik';
 import { Box } from 'components/Box/Box';
 import { InputTitle, InputField, AddBtn } from './ContactForm.styled';
 import * as yup from 'yup';
 
 const ContactForm = ({ onSubmit }) => {
+  // const value = useSelector(state => state.myValue);
+
   let schema = yup.object().shape({
     name: yup
       .string()
@@ -24,35 +25,37 @@ const ContactForm = ({ onSubmit }) => {
   });
 
   return (
-    <Formik
-      initialValues={{
-        name: '',
-        number: '',
-      }}
-      validationSchema={schema}
-      onSubmit={onSubmit}
-    >
-      <Form autoComplete="off">
-        <Box
-          display="flex"
-          flexDirection="column"
-          justifyContent="center"
-          p="l"
-        >
-          <InputField htmlFor="name">
-            <InputTitle>Name</InputTitle>
-            <Field type="text" name="name" />
-            <ErrorMessage component="div" name="name" />
-          </InputField>
-          <InputField htmlFor="number">
-            <InputTitle>Phone</InputTitle>
-            <Field type="tel" name="number" />
-            <ErrorMessage component="div" name="number" />
-          </InputField>
-          <AddBtn type="submit">Add Contact</AddBtn>
-        </Box>
-      </Form>
-    </Formik>
+    <>
+      <Formik
+        initialValues={{
+          name: '',
+          number: '',
+        }}
+        validationSchema={schema}
+        onSubmit={onSubmit}
+      >
+        <Form autoComplete="off">
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            p="l"
+          >
+            <InputField htmlFor="name">
+              <InputTitle>Name</InputTitle>
+              <Field type="text" name="name" />
+              <ErrorMessage component="div" name="name" />
+            </InputField>
+            <InputField htmlFor="number">
+              <InputTitle>Phone</InputTitle>
+              <Field type="tel" name="number" />
+              <ErrorMessage component="div" name="number" />
+            </InputField>
+            <AddBtn type="submit">Add Contact</AddBtn>
+          </Box>
+        </Form>
+      </Formik>
+    </>
   );
 };
 

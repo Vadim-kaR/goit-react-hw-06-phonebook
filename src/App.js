@@ -1,15 +1,24 @@
-import { useState } from 'react';
 import { ContactsList } from 'components/ContatsList/ContacstsList';
 import { ContactForm } from './components/ContactForm/ContactForm';
 import { nanoid } from 'nanoid';
 import { Filter } from 'components/Filter/Filter';
 import { ContactsTitle } from 'components/ContactsTitle/ContactsTitle';
 import { Box } from 'components/Box/Box';
-import { useLocalStorage } from './hooks/useLocalStorage';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  add,
+  remove,
+  filterName,
+  getContacts,
+  geFilterName,
+} from 'redux/myValue/slice';
 
 function App() {
-  const [contacts, setContacts] = useLocalStorage('contacts', []);
-  const [filter, setFilter] = useState('');
+  // const [contacts, setContacts] = useLocalStorage('contacts', []);
+  // const [filter, setFilter] = useState('');
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+  const filter = useSelector(geFilterName);
 
   const getFiltredContact = () => {
     const lowerCasedFilter = filter.toLowerCase();
@@ -19,7 +28,8 @@ function App() {
   };
 
   const setFilterName = e => {
-    setFilter(e.currentTarget.value);
+    // setFilter(e.currentTarget.value);
+    dispatch(filterName(e.currentTarget.value));
   };
 
   const handelContactSubmit = ({ name, number }) => {
@@ -37,13 +47,15 @@ function App() {
       alert(`${name} is already in contacts.`);
       return;
     }
-    setContacts([newContact, ...contacts]);
+    // setContacts([newContact, ...contacts]);
+    dispatch(add(newContact));
   };
 
   const deleteContact = id => {
-    setContacts(prevContacts =>
-      prevContacts.filter(contact => contact.id !== id)
-    );
+    // setContacts(prevContacts =>
+    //   prevContacts.filter(contact => contact.id !== id)
+    // );
+    dispatch(remove(id));
   };
 
   return (
