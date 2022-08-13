@@ -1,11 +1,15 @@
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { Form, Field, Formik, ErrorMessage } from 'formik';
 import { Box } from 'components/Box/Box';
 import { InputTitle, InputField, AddBtn } from './ContactForm.styled';
 import * as yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { nanoid } from 'nanoid';
+import { addContact, getContacts } from 'redux/slice';
 
-const ContactForm = ({ onSubmit }) => {
-  // const value = useSelector(state => state.myValue);
+const ContactForm = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
 
   let schema = yup.object().shape({
     name: yup
@@ -24,6 +28,26 @@ const ContactForm = ({ onSubmit }) => {
       ),
   });
 
+  const handelContactSubmit = ({ name, number }) => {
+    const newContact = {
+      id: nanoid(),
+      name: name,
+      number: number,
+    };
+    console.log(newContact);
+
+    const alreadyName = contacts.find(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (alreadyName) {
+      alert(`${name} is already in contacts.`);
+      return;
+    }
+
+    dispatch(addContact(newContact));
+  };
+
   return (
     <>
       <Formik
@@ -32,7 +56,7 @@ const ContactForm = ({ onSubmit }) => {
           number: '',
         }}
         validationSchema={schema}
-        onSubmit={onSubmit}
+        onSubmit={handelContactSubmit}
       >
         <Form autoComplete="off">
           <Box
@@ -57,10 +81,6 @@ const ContactForm = ({ onSubmit }) => {
       </Formik>
     </>
   );
-};
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export { ContactForm };
